@@ -36,6 +36,43 @@ initDB();
 app.use('/api/users', userRoutes);
 app.use('/api/rooms', roomRoutes);
 
+// Temporary Root Landing Page for the Backend
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>Virtual Diwali API</title>
+                <style>
+                    body { 
+                        background-color: #02010a; 
+                        color: #ff7a00; 
+                        font-family: system-ui, sans-serif; 
+                        display: flex; 
+                        flex-direction: column;
+                        justify-content: center; 
+                        align-items: center; 
+                        height: 100vh; 
+                        margin: 0; 
+                    }
+                    h1 { font-weight: 300; letter-spacing: 2px; }
+                    p { color: #888; font-weight: 300; letter-spacing: 1px; }
+                    .spark { font-size: 2rem; animation: pulse 2s infinite; }
+                    @keyframes pulse {
+                        0%, 100% { opacity: 1; transform: scale(1); }
+                        50% { opacity: 0.5; transform: scale(1.1); }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="spark">✨</div>
+                <h1>Virtual Diwali API</h1>
+                <p>Backend Server & WebSockets are running successfully.</p>
+            </body>
+        </html>
+    `);
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'success', message: 'Server is healthy' });
