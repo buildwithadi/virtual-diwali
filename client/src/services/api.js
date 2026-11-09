@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Automatically use the production URL if deployed, otherwise use localhost
 const API_URL = import.meta.env.VITE_BACKEND_URL 
     ? `${import.meta.env.VITE_BACKEND_URL}/api` 
     : 'http://localhost:3000/api';
@@ -10,9 +9,10 @@ export const api = axios.create({
     headers: { 'Content-Type': 'application/json' }
 });
 
-export const registerUser = async (username, email) => {
+// Removed email parameter
+export const registerUser = async (username) => {
     try {
-        const response = await api.post('/users/register', { username, email });
+        const response = await api.post('/users/register', { username });
         return response.data;
     } catch (error) {
         throw error.response?.data?.error || 'Failed to register';

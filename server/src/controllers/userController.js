@@ -1,20 +1,17 @@
 import * as userService from '../services/userService.js';
 
 export const registerUser = (req, res) => {
-    const { username, email } = req.body;
+    const { username } = req.body;
 
-    if (!username || !email) {
-        return res.status(400).json({ error: 'Username and email are required' });
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email format' });
-    }
+    // Auto-generate a dummy email to satisfy the existing DB schema
+    const dummyEmail = `${username.toLowerCase().replace(/\s+/g, '')}_${Date.now()}@virtual-diwali.local`;
 
     try {
-        const user = userService.registerOrGetUser(username, email);
+        const user = userService.registerOrGetUser(username, dummyEmail);
         res.status(200).json({ message: 'User registered successfully', user });
     } catch (error) {
         console.error('Registration error:', error);
@@ -29,7 +26,6 @@ export const getUser = (req, res) => {
         const user = userService.getUserById(id);
         if (!user) return res.status(404).json({ error: 'User not found' });
         
-        // Don't send sensitive info if not needed, though we just have email
         res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
